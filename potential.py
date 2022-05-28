@@ -1,4 +1,4 @@
-from config import Config
+from data_manager import Date
 from kivy.uix.button import Button
 from kivymd.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
@@ -6,19 +6,20 @@ from kivymd.uix.picker import MDDatePicker
 from kivy_garden.graph import Graph, MeshLinePlot
 from kivy.uix.screenmanager import SlideTransition
 
-cfg = Config()
-
 class Potential_graph(BoxLayout):
     def __init__(self, app):
         super().__init__()
         self.__app = app
+
+        save_data = Date()
+        save_data = save_data.get_date()['current_date']
 
         self.orientation = 'vertical'
 
         header = BoxLayout(size_hint=(1, 0.06))
 
         title = Label(text='Potential graph', color='black', font_size=25)
-        date = Label(text=f'Current date: {cfg.current_date}', color='black', font_size=25)
+        date = Label(text=f'Current date: {save_data}', color='black', font_size=25)
         
         header.add_widget(title)
         header.add_widget(date)

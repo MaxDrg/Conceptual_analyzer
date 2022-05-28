@@ -1,5 +1,6 @@
-from config import Config
+from datetime import datetime
 from kivy.metrics import dp
+from data_manager import Date
 from kivy.uix.button import Button
 from kivymd.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
@@ -7,19 +8,20 @@ from kivymd.uix.picker import MDDatePicker
 from kivymd.uix.datatables import MDDataTable
 from kivy.uix.screenmanager import SlideTransition
 
-cfg = Config()
-
 class Pythagor_table(BoxLayout):
     def __init__(self, app):
         super().__init__()
         self.__app = app
+
+        save_data = Date()
+        save_data = save_data.get_date()['current_date']
 
         self.orientation = 'vertical'
 
         header = BoxLayout(size_hint=(1, 0.06))
 
         title = Label(text='Pythagor table', color='black', font_size=25)
-        date = Label(text=f'Current date: {cfg.current_date}', color='black', font_size=25)
+        date = Label(text=f'Current date: {save_data}', color='black', font_size=25)
         
         header.add_widget(title)
         header.add_widget(date)
@@ -69,8 +71,18 @@ class Pythagor_table(BoxLayout):
 
     def input_button(self, item):
         date = MDDatePicker()
+        date.bind(on_save=self.set_date)
         date.open()
 
     def potential_button(self, item):
         self.__app.screen_manager.transition = SlideTransition(direction = 'left')
         self.__app.screen_manager.current = 'potential_graph'
+
+    def set_date(self, instance, value, date_range):
+        save_date = Date()
+        date: datetime = value
+        save_date.set_date(
+            year=date.year,
+            month=date.month,
+            day=date.day
+        )

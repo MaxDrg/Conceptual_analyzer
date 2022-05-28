@@ -1,5 +1,5 @@
-from config import Config
 from kivy.metrics import dp
+from data_manager import Date
 from kivy.uix.button import Button
 from kivymd.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
@@ -7,20 +7,20 @@ from kivymd.uix.picker import MDDatePicker
 from kivymd.uix.datatables import MDDataTable
 from kivy.uix.screenmanager import SlideTransition
 
-cfg = Config()
-
 class Individual_matrix(BoxLayout):
     def __init__(self, app):
         super().__init__()
         self.__app = app
 
+        save_data = Date()
+        save_data = save_data.get_date()['current_date']
+
         self.orientation = 'vertical'
-        # view = BoxLayout(orientation = 'vertical')
 
         header = BoxLayout(size_hint=(1, 0.06))
 
         title = Label(text='Individual matrix', color='black', font_size=25)
-        date = Label(text=f'Current date: {cfg.current_date}', color='black', font_size=25)
+        date = Label(text=f'Current date: {save_data}', color='black', font_size=25)
         
         header.add_widget(title)
         header.add_widget(date)
@@ -29,7 +29,7 @@ class Individual_matrix(BoxLayout):
             # name column, width column, sorting function column(optional)
             pos_hint={"center_y": 0.5, "center_x": 0.5},
             size_hint=(0.95, 0.5),
-            column_data=[(str(i), dp(30)) for i in range(1,5)],
+            column_data=[(str(i), dp(40)) for i in range(1,5)],
             row_data=[
                 ("2", "1", "2", "3", "6"),
                 ("2", "1", "2", "3", "6"),
