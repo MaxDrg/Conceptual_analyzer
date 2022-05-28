@@ -1,3 +1,4 @@
+from config import Config
 from kivy.metrics import dp
 from kivy.uix.button import Button
 from kivymd.uix.label import Label
@@ -6,15 +7,22 @@ from kivymd.uix.picker import MDDatePicker
 from kivymd.uix.datatables import MDDataTable
 from kivy.uix.screenmanager import SlideTransition
 
+cfg = Config()
+
 class Pythagor_table(BoxLayout):
     def __init__(self, app):
         super().__init__()
         self.__app = app
 
         self.orientation = 'vertical'
-        # view = BoxLayout(orientation = 'vertical')
 
-        title = Label(text='Pythagor table', color='black', size_hint=(1, 0.05), font_size=25)
+        header = BoxLayout(size_hint=(1, 0.06))
+
+        title = Label(text='Pythagor table', color='black', font_size=25)
+        date = Label(text=f'Current date: {cfg.current_date}', color='black', font_size=25)
+        
+        header.add_widget(title)
+        header.add_widget(date)
         
         table = MDDataTable(
             pos_hint={"center_y": 0.5, "center_x": 0.5},
@@ -51,7 +59,7 @@ class Pythagor_table(BoxLayout):
         buttons.add_widget(input)
         buttons.add_widget(potential)
 
-        self.add_widget(title)
+        self.add_widget(header)
         self.add_widget(table)
         self.add_widget(buttons)
     

@@ -1,3 +1,4 @@
+from config import Config
 from kivy.metrics import dp
 from kivy.uix.button import Button
 from kivymd.uix.label import Label
@@ -5,6 +6,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivymd.uix.picker import MDDatePicker
 from kivymd.uix.datatables import MDDataTable
 from kivy.uix.screenmanager import SlideTransition
+
+cfg = Config()
 
 class Individual_matrix(BoxLayout):
     def __init__(self, app):
@@ -14,7 +17,13 @@ class Individual_matrix(BoxLayout):
         self.orientation = 'vertical'
         # view = BoxLayout(orientation = 'vertical')
 
-        title = Label(text='Individual matrix', color='black', size_hint=(1, 0.05), font_size=25)
+        header = BoxLayout(size_hint=(1, 0.06))
+
+        title = Label(text='Individual matrix', color='black', font_size=25)
+        date = Label(text=f'Current date: {cfg.current_date}', color='black', font_size=25)
+        
+        header.add_widget(title)
+        header.add_widget(date)
         
         table = MDDataTable(
             # name column, width column, sorting function column(optional)
@@ -32,6 +41,9 @@ class Individual_matrix(BoxLayout):
         potential = Button(text="Potential graph")
         potential.bind(on_press=self.potential_button)
 
+        input = Button(text="Input data", pos =(20, 20))
+        input.bind(on_press=self.input_button)
+
         pythagor = Button(text="Pythagor table", pos =(20, 20))
         pythagor.bind(on_press=self.pythagor_button)
 
@@ -40,7 +52,7 @@ class Individual_matrix(BoxLayout):
         buttons.add_widget(input)
         buttons.add_widget(pythagor)
 
-        self.add_widget(title)
+        self.add_widget(header)
         self.add_widget(table)
         self.add_widget(buttons)
     

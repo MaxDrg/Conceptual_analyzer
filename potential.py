@@ -1,9 +1,12 @@
+from config import Config
 from kivy.uix.button import Button
 from kivymd.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivymd.uix.picker import MDDatePicker
 from kivy_garden.graph import Graph, MeshLinePlot
 from kivy.uix.screenmanager import SlideTransition
+
+cfg = Config()
 
 class Potential_graph(BoxLayout):
     def __init__(self, app):
@@ -12,7 +15,13 @@ class Potential_graph(BoxLayout):
 
         self.orientation = 'vertical'
 
-        title = Label(text='Potential graph', color='black', size_hint=(1, 0.05), font_size=25)
+        header = BoxLayout(size_hint=(1, 0.06))
+
+        title = Label(text='Potential graph', color='black', font_size=25)
+        date = Label(text=f'Current date: {cfg.current_date}', color='black', font_size=25)
+        
+        header.add_widget(title)
+        header.add_widget(date)
 
         graph_buttons = BoxLayout(padding=8, size_hint=(1, 0.08))
         for i in range(1, 13):
@@ -81,7 +90,7 @@ class Potential_graph(BoxLayout):
         buttons.add_widget(input)
         buttons.add_widget(individual)
         
-        self.add_widget(title)
+        self.add_widget(header)
         self.add_widget(graph_buttons)
         self.add_widget(graph)
         self.add_widget(buttons)
