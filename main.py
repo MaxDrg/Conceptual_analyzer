@@ -1,6 +1,4 @@
-from datetime import datetime
 from kivymd.app import MDApp
-from data_manager import Date
 from pythagor import Pythagor_table
 from potential import Potential_graph
 from individual import Individual_matrix
@@ -34,7 +32,5 @@ class ConceptualAnalyzerApp(MDApp):
         return self.screen_manager
 
 if __name__ == "__main__":
-    date = Date()
-    date.set_date()
     app = ConceptualAnalyzerApp()
     app.run()

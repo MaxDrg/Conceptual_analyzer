@@ -1,4 +1,4 @@
-from data_manager import Date
+from datetime import datetime
 from kivy.uix.button import Button
 from kivymd.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
@@ -10,21 +10,19 @@ class Potential_graph(BoxLayout):
     def __init__(self, app):
         super().__init__()
         self.__app = app
-
-        save_data = Date()
-        save_data = save_data.get_date()['current_date']
-
+        
+        self.current_date = datetime.now().strftime("%d %B, %Y")
         self.orientation = 'vertical'
 
         header = BoxLayout(size_hint=(1, 0.06))
 
         title = Label(text='Potential graph', color='black', font_size=25)
-        date = Label(text=f'Current date: {save_data}', color='black', font_size=25)
+        self.date = Label(text=f'Current date: {self.current_date}', color='black', font_size=25)
         
         header.add_widget(title)
-        header.add_widget(date)
+        header.add_widget(self.date)
 
-        graph_buttons = BoxLayout(padding=8, size_hint=(1, 0.08))
+        graph_buttons = BoxLayout(padding=8, size_hint=(1, 0.06))
         for i in range(1, 13):
             button = Button(text=str(i), pos =(20, 20))
             button.bind(on_press=self.get_graph)
@@ -102,6 +100,7 @@ class Potential_graph(BoxLayout):
 
     def input_button(self, item):
         date = MDDatePicker()
+        date.bind(on_save=self.update_date)
         date.open()
 
     def individual_button(self, item):
@@ -110,3 +109,7 @@ class Potential_graph(BoxLayout):
 
     def get_graph(self, item):
         pass
+
+    def update_date(self, instance, value, date_range):
+        date: datetime = value
+        self.date.text = f'Current date: {date.strftime("%d %B, %Y")}'

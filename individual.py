@@ -1,5 +1,5 @@
 from kivy.metrics import dp
-from data_manager import Date
+from datetime import datetime
 from kivy.uix.button import Button
 from kivymd.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
@@ -12,18 +12,16 @@ class Individual_matrix(BoxLayout):
         super().__init__()
         self.__app = app
 
-        save_data = Date()
-        save_data = save_data.get_date()['current_date']
-
+        self.current_date = datetime.now().strftime("%d %B, %Y")
         self.orientation = 'vertical'
 
         header = BoxLayout(size_hint=(1, 0.06))
 
         title = Label(text='Individual matrix', color='black', font_size=25)
-        date = Label(text=f'Current date: {save_data}', color='black', font_size=25)
+        self.date = Label(text=f'Current date: {self.current_date}', color='black', font_size=25)
         
         header.add_widget(title)
-        header.add_widget(date)
+        header.add_widget(self.date)
         
         table = MDDataTable(
             # name column, width column, sorting function column(optional)
@@ -62,8 +60,13 @@ class Individual_matrix(BoxLayout):
 
     def input_button(self, item):
         date = MDDatePicker()
+        date.bind(on_save=self.update_date)
         date.open()
 
     def potential_button(self, item):
         self.__app.screen_manager.transition = SlideTransition(direction = 'right')
         self.__app.screen_manager.current = 'potential_graph'
+
+    def update_date(self, instance, value, date_range):
+        date: datetime = value
+        self.date.text = f'Current date: {date.strftime("%d %B, %Y")}'
