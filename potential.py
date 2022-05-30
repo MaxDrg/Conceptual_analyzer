@@ -1,3 +1,4 @@
+from matrix import Matrix
 from datetime import datetime
 from kivy.uix.button import Button
 from kivymd.uix.label import Label
@@ -44,36 +45,19 @@ class Potential_graph(BoxLayout):
             ymin = 0,
             ymax = 13,
             background_color = [0, 0, 0, 1],
-            # xlabel='X', ylabel='Y', 
-            #size_hint=(1, 0.5),
-            #xlabel= "Time",
-            #ylabel = "CPU Usage (%)",
-            #draw_border=False,
-            #x_ticks_minor=1,
-            #x_ticks_major=1, 
-            #y_ticks_major=1,
-            #y_grid_label=True, 
-            #x_grid_label=True, 
-            #padding=10,
-            #x_grid=True, 
-            #y_grid=True, 
-            #xmin=0, xmax=30, ymin=0, ymax=13,
         )
-        #graph = Graph(y_ticks_major=0.5,
-        #    #x_ticks_major=64,
-        #    size_hint=(0.93, 0.2),
-        #    border_color=[0, 1, 1, 1],
-        #    tick_color=[0, 1, 1, 0.7],
-        #    x_grid=True, y_grid=True,
-        #    xmin=0, xmax=30,
-        #    ymin=0, ymax=13,
-        #    draw_border=True,
-        #    x_grid_label=True, y_grid_label=True
-        #)
 
-        plot = MeshLinePlot(color=[1, 0, 0, 10])
-        plot.points = [(x, 0.5 + x) if x % 2 == 0 and x <= 12 else (x, 0.5) for x in range(0, 30)]
-        graph.add_plot(plot)
+        self.plot = MeshLinePlot(color=[1, 0, 0, 10])
+
+        date_input = lambda x: x if len(str(x)) == 2 else f"0{x}"
+
+        matx = Matrix(
+            month=date_input(datetime.now().month), 
+            year=datetime.now().year
+        )
+        
+        self.plot.points = matx.get_num_matrix(1)
+        graph.add_plot(self.plot)
 
         pythagor = Button(text="Pythagor table", pos =(20, 20))
         pythagor.bind(on_press=self.pythagor_button)
@@ -108,7 +92,14 @@ class Potential_graph(BoxLayout):
         self.__app.screen_manager.current = 'individual_matrix'
 
     def get_graph(self, item):
-        pass
+        date: datetime = datetime.strptime(self.date.text, 'Current date: %d %B, %Y')
+        date_input = lambda x: x if len(str(x)) == 2 else f"0{x}"
+
+        matx = Matrix(
+            month=date_input(date.month), 
+            year=date.year
+        )
+        self.plot.points = matx.get_num_matrix(item.text)
 
     def update_date(self, instance, value, date_range):
         date: datetime = value

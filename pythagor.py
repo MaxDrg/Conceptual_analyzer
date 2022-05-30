@@ -1,3 +1,4 @@
+from matrix import Matrix
 from kivy.metrics import dp
 from datetime import datetime
 from kivy.uix.button import Button
@@ -22,26 +23,20 @@ class Pythagor_table(BoxLayout):
         
         header.add_widget(title)
         header.add_widget(self.date)
+
+        date_input = lambda x: x if len(str(x)) == 2 else f"0{x}"
+
+        matx = Matrix(
+            month=date_input(datetime.now().month), 
+            year=datetime.now().year
+        )
         
-        table = MDDataTable(
+        self.table = MDDataTable(
             pos_hint={"center_y": 0.5, "center_x": 0.5},
             size_hint=(0.95, 0.5),
             column_data=[('', dp(5))] + [(str(i), dp(5)) for i in range(1,31)],
-            rows_num=15,
-            row_data=[
-            ("[color=#ff0303]1[/color]", "1", "2", "3",6,1,3,3,4,4,4,4,4,4,4,4,3,3,3,3,3,3,4,4,4,4,4,4,4,5,5),
-            ("[color=#ff0303]2[/color]", "1", "2", "3",6,1,3,3,4,4,4,4,4,4,4,4,3,3,3,3,3,3,4,4,4,4,4,4,4,5,5),
-            ("[color=#ff0303]3[/color]", "1", "2", "3",6,1,3,3,4,4,4,4,4,4,4,4,3,3,3,3,3,3,4,4,4,4,4,4,4,5,5),
-            ("[color=#ff0303]4[/color]", "1", "2", "3",6,1,3,3,4,4,4,4,4,4,4,4,3,3,3,3,3,3,4,4,4,4,4,4,4,5,5),
-            ("[color=#ff0303]5[/color]", "1", "2", "3",6,1,3,3,4,4,4,4,4,4,4,4,3,3,3,3,3,3,4,4,4,4,4,4,4,5,5),
-            ("[color=#ff0303]6[/color]", "1", "2", "3",6,1,3,3,4,4,4,4,4,4,4,4,3,3,3,3,3,3,4,4,4,4,4,4,4,5,5),
-            ("[color=#ff0303]7[/color]", "1", "2", "3",6,1,3,3,4,4,4,4,4,4,4,4,3,3,3,3,3,3,4,4,4,4,4,4,4,5,5),
-            ("[color=#ff0303]8[/color]", "1", "2", "3",6,1,3,3,4,4,4,4,4,4,4,4,3,3,3,3,3,3,4,4,4,4,4,4,4,5,5),
-            ("[color=#ff0303]9[/color]", "1", "2", "3",6,1,3,3,4,4,4,4,4,4,4,4,3,3,3,3,3,3,4,4,4,4,4,4,4,5,5),
-            ("[color=#ff0303]10[/color]", "1", "2", "3",6,1,3,3,4,4,4,4,4,4,4,4,3,3,3,3,3,3,4,4,4,4,4,4,4,5,5),
-            ("[color=#ff0303]11[/color]", "1", "2", "3",6,1,3,3,4,4,4,4,4,4,4,4,3,3,3,3,3,3,4,4,4,4,4,4,4,5,5),
-            ("[color=#ff0303]12[/color]", "1", "2", "3",6,1,3,3,4,4,4,4,4,4,4,4,3,3,3,3,3,3,4,4,4,4,4,4,4,5,5),
-            ("[color=#ff0303]13[/color]", "1", "2", "3",6,1,3,3,4,4,4,4,4,4,4,4,3,3,3,3,3,3,4,4,4,4,4,4,4,5,5),],
+            rows_num=12,
+            row_data=matx.get_month_matrix(),
         )
 
         individual = Button(text="Individual matrix")
@@ -59,7 +54,7 @@ class Pythagor_table(BoxLayout):
         buttons.add_widget(potential)
 
         self.add_widget(header)
-        self.add_widget(table)
+        self.add_widget(self.table)
         self.add_widget(buttons)
     
     def individual_button(self, item):
@@ -77,4 +72,12 @@ class Pythagor_table(BoxLayout):
 
     def update_date(self, instance, value, date_range):
         date: datetime = value
+        date_input = lambda x: x if len(str(x)) == 2 else f"0{x}"
+
+        matx = Matrix(
+            month=date_input(date.month), 
+            year=date.year
+        )
+
         self.date.text = f'Current date: {date.strftime("%d %B, %Y")}'
+        self.table.row_data = matx.get_month_matrix()
